@@ -5,12 +5,12 @@
 #### TODO ####
 # (Maybe) Modify .cfg to route output through /output/
 
-# Fetch the base for Ubuntu version 16.04 
+# Fetch the base for Ubuntu version 16.04
 Bootstrap: docker
 From: ubuntu:16.04
 
 # Create all necessary folders for copying files to container
-%setup 
+%setup
     mkdir ${SINGULARITY_ROOTFS}/boost
     mkdir ${SINGULARITY_ROOTFS}/clang
     mkdir ${SINGULARITY_ROOTFS}/staging
@@ -34,10 +34,10 @@ From: ubuntu:16.04
 
     # Set up environment vars for new clang
     cd /clang/
-    export PATH="/usr/local/clang_9.0.0/bin:$PATH" 
+    export PATH="/usr/local/clang_9.0.0/bin:$PATH"
     export LD_LIBRARY_PATH="/usr/local/clang_9.0.0/lib:$LD_LIBRARY_PATH"
-    wget http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz -O clang.tar.xz 
-    tar -xJf clang.tar.xz 
+    wget http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz -O clang.tar.xz
+    tar -xJf clang.tar.xz
     cp clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-16.04/* /usr/local/clang_9.0.0 -r
     clang++ --version
 
@@ -50,7 +50,7 @@ From: ubuntu:16.04
     cd tools/build
     ./bootstrap.sh --with-toolset=clang
     ./b2 install --toolset=clang
-    cp src/contrib/boost.jam /usr/local/share/boost-build/src/tools/boost.jam 
+    cp src/contrib/boost.jam /usr/local/share/boost-build/src/tools/boost.jam
     cd ../..
     ./bootstrap.sh --with-toolset=clang --with-libraries=filesystem,iostreams,program_options,regex,serialization,system,test,timer --without-icu
     ./b2 > b2_out.txt
@@ -61,25 +61,25 @@ From: ubuntu:16.04
 
     # Download ealib + avida, and compile avida
     cd /research
-    git clone https://github.com/dknoester/ealib
+    git clone https://github.com/kgskocelas/ealib.git
     cp /staging/Jamfile /research/ealib/libea/Jamfile
     git clone https://github.com/kgskocelas/avida4.git
     cd /research/avida4
-    b2  
+    b2
 
     # Uninstall some things to make image smaller (I'm sure there's more we could purge..."
-    # apt remove --purge -y build-essential
-    # apt remove --purge -y git
-    # apt remove --purge -y wget
-    # rm /boost/boost_1_71_0.tar.gz
-    # rm /clang/*
-    # rm /var/lib/apt/lists/*
+    apt remove --purge -y build-essential
+    apt remove --purge -y git
+    apt remove --purge -y wget
+    rm /boost/boost_1_71_0.tar.gz
+    rm /var/lib/apt/lists/* -r
+    rm /clang/* -r
 
 # Environment variables set in post are not saved for subsequent runs
 # Therefore we define those here
 %environment
-    export PATH="/usr/local/clang_9.0.0/bin:$PATH" 
-    export LD_LIBRARY_PATH="/usr/local/clang_9.0.0/lib:$LD_LIBRARY_PATH" 
+    export PATH="/usr/local/clang_9.0.0/bin:$PATH"
+    export LD_LIBRARY_PATH="/usr/local/clang_9.0.0/lib:$LD_LIBRARY_PATH"
     export BOOST_BUILD_PATH="/usr/local/share/boost-build"
 
 # This executes when user executes the image in the terminal
