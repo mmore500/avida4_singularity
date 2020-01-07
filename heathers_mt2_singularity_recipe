@@ -61,7 +61,7 @@ From: ubuntu:16.04
 
     # Download ealib + avida, and compile avida
     cd /research
-    git clone https://github.com/heathergoldsby/ealib.git
+    git clone https://github.com/kgskocelas/ealib.git
     cp /staging/Jamfile /research/ealib/libea/Jamfile
     git clone https://github.com/heathergoldsby/mt2.git
     cd /research/mt2
@@ -87,4 +87,3 @@ From: ubuntu:16.04
 %runscript
     echo "Arguments received: $*"
     /research/mt2/bin/clang-linux-9.0.0/release/link-static/mt_lr_gls -c /research/mt2/etc/major_transitions.cfg $*
-    /research/mt2/bin/clang-linux-9.0.0/release/link-static/mt_lr_gls_rogue -c /research/mt2/etc/major_transitions.cfg $*
