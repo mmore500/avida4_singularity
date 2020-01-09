@@ -61,7 +61,7 @@ From: ubuntu:16.04
 
     # Download ealib + avida, and compile avida
     cd /research
-    git clone https://github.com/heathergoldsby/ealib.git
+    git clone https://github.com/dknoester/ealib.git
     cp /staging/Jamfile /research/ealib/libea/Jamfile
     git clone https://github.com/heathergoldsby/mt2.git
     cd /research/mt2
